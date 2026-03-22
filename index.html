@@ -1,0 +1,810 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px 'Helvetica Neue'; min-height: 15.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!doctype html&gt;</p>
+<p class="p1">&lt;html lang="th"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;โปรแกรมวิเคราะห์ CVI (Content Validity Index)&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com/3.4.17"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Library for Export --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Flaticon (Uicons) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-rounded/css/uicons-solid-rounded.css'&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.1.0/uicons-bold-rounded/css/uicons-bold-rounded.css'&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&amp;family=Sarabun:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>* { font-family: 'Sarabun', sans-serif; scroll-behavior: smooth; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.hidden { display: none !important; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.score-btn { transition: all 0.2s ease; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.score-btn:hover { transform: scale(1.1); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.score-btn.selected { transform: scale(1.15); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes fadeIn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>from { opacity: 0; transform: translateY(10px); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>to { opacity: 1; transform: translateY(0); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.fade-in { animation: fadeIn 0.3s ease-out; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.result-card { transition: all 0.3s ease; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.result-card:hover { transform: translateY(-5px); }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>input[type=number]::-webkit-inner-spin-button,<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>input[type=number]::-webkit-outer-spin-button {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>-webkit-appearance: none;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>input[type=number] { -moz-appearance: textfield; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.custom-scrollbar::-webkit-scrollbar { height: 8px; width: 8px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.cvi-toggle-box {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 96px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 42px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #F03C25;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 42px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: background-color 0.4s ease;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>input:checked + .cvi-toggle-box { background-color: #75D554; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.cvi-toggle-thumb {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 34px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 34px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>right: 4px;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 2px 5px rgba(0,0,0,0.25);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>input:checked + .cvi-toggle-box .cvi-toggle-thumb {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateX(-54px);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.cvi-toggle-text-off {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>left: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-50%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 17px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: opacity 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>input:checked + .cvi-toggle-box .cvi-toggle-text-off { opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.cvi-toggle-text-on {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>right: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-50%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 17px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: opacity 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>input:checked + .cvi-toggle-box .cvi-toggle-text-on { opacity: 1; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.controls-group {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: flex-start;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 1.25rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.4s ease;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="min-h-screen bg-[linear-gradient(to_bottom_right,#f0f4f8,#f8fafc,#ffffff)] bg-fixed pb-20"&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Sidebar Menu Overlay --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="menuBackdrop" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300" onclick="closeMenu()"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Sidebar Menu Panel --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="sideMenu" class="fixed top-0 left-0 w-72 max-w-[80vw] h-full bg-white shadow-[20px_0_40px_-15px_rgba(0,0,0,0.1)] z-[70] transform -translate-x-full transition-transform duration-300 ease-out flex flex-col"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3 class="font-bold text-slate-800 text-lg flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="menu" class="w-5 h-5 text-[#ED812E]"&gt;&lt;/i&gt; เมนูหลัก</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="closeMenu()" class="p-2 rounded-full hover:bg-slate-200 text-slate-500 transition-colors focus:outline-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="x" class="w-5 h-5"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="p-4 flex flex-col gap-2 flex-1 overflow-y-auto custom-scrollbar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#" onclick="closeMenu()" class="flex items-center gap-3 p-3.5 rounded-xl hover:bg-[#FF9A8B]/10 text-slate-700 hover:text-[#ED812E] font-medium transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="home" class="w-5 h-5"&gt;&lt;/i&gt; หน้าแรก</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="javascript:void(0)" onclick="closeMenu(); openManual();" class="flex items-center gap-3 p-3.5 rounded-xl hover:bg-[#FF9A8B]/10 text-slate-700 hover:text-[#ED812E] font-medium transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="book-open" class="w-5 h-5"&gt;&lt;/i&gt; คู่มือการใช้งาน</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#evaluationSection" onclick="closeMenu()" class="flex items-center gap-3 p-3.5 rounded-xl hover:bg-[#FF9A8B]/10 text-slate-700 hover:text-[#ED812E] font-medium transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i class="fi fi-sr-table-list w-5 h-5 mt-1"&gt;&lt;/i&gt; ตารางประเมิน</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#resultsSection" onclick="closeMenu()" class="flex items-center gap-3 p-3.5 rounded-xl hover:bg-[#FF9A8B]/10 text-slate-700 hover:text-[#ED812E] font-medium transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="bar-chart-2" class="w-5 h-5"&gt;&lt;/i&gt; ผลการวิเคราะห์</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="javascript:void(0)" onclick="closeMenu(); clearAllScores();" class="flex items-center gap-3 p-3.5 rounded-xl hover:bg-red-50 text-slate-700 hover:text-red-600 font-medium transition-colors mt-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="rotate-ccw" class="w-5 h-5"&gt;&lt;/i&gt; ล้างข้อมูลทั้งหมด</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="p-6 border-t border-slate-100 text-xs text-slate-400 text-center font-medium bg-slate-50/50"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>CVI Analyzer v1.0&lt;br&gt;คณะพยาบาลศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="w-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Header Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="w-full relative py-8 px-4 md:px-8 flex items-center justify-between z-10 overflow-hidden bg-white border-b border-slate-200 shadow-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="text-[14rem] md:text-[22rem] font-black text-black/[0.015] select-none leading-none tracking-tighter mt-8"&gt;CVI&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex items-center gap-3 md:gap-4 relative z-10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="bg-blue-600 p-2.5 rounded-xl md:rounded-2xl shadow-lg shadow-blue-200 flex items-center justify-center shrink-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="file-check-2" class="text-white w-7 h-7 md:w-9 md:h-9"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex flex-col items-start justify-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h1 class="text-[1.1rem] sm:text-[1.3rem] md:text-[1.6rem] lg:text-[1.85rem] font-bold tracking-tight leading-tight text-slate-800" style="font-family: 'Kanit', sans-serif;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>โปรแกรมวิเคราะห์ค่าความตรงเชิงเนื้อหา</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-blue-50 rounded-full px-3 md:px-4 py-0.5 md:py-1 mt-1 border border-blue-100 inline-flex"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="text-blue-700 font-bold text-[0.65rem] md:text-[0.75rem] tracking-wide uppercase" style="font-family: 'Kanit', sans-serif;"&gt;CONTENT VALIDITY INDEX (CVI)&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex items-center gap-2 md:gap-4 relative z-10 shrink-0 ml-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="openManual()" class="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all active:scale-90 focus:outline-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="help-circle" class="w-6 h-6"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="openMenu()" class="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all active:scale-90 focus:outline-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="menu" class="w-6 h-6"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Main Content --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="max-w-7xl mx-auto p-4 md:p-8 space-y-8 mt-4 relative z-20"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- ข้อมูลการประเมิน Card --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8 fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4 border-b border-slate-100 pb-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2 class="text-xl md:text-2xl font-bold flex items-center gap-3 text-slate-800" style="font-family: 'Kanit', sans-serif;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="settings" class="text-blue-600"&gt;&lt;/i&gt; ตั้งค่าข้อมูลการประเมิน</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/h2&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex items-center gap-3 bg-slate-50 py-2.5 px-5 rounded-2xl border border-slate-200 shrink-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="text-xs md:text-sm font-bold text-slate-600"&gt;ระบุรายละเอียดข้อคำถาม&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label class="relative inline-flex items-center cursor-pointer"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="checkbox" id="enableDetails" onchange="toggleItemDetails()" class="sr-only"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="cvi-toggle-box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;span class="cvi-toggle-text-off"&gt;OFF&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;span class="cvi-toggle-text-on"&gt;ON&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div class="cvi-toggle-thumb"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="controls-group" id="mainControlsGroup"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- จำนวนผู้เชี่ยวชาญ --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label class="block text-slate-500 font-bold mb-2 text-[10px] uppercase tracking-widest"&gt;จำนวนผู้เชี่ยวชาญ&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex items-center shadow-sm rounded-xl overflow-hidden border border-slate-200 w-fit bg-white"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button onclick="updateNumber('numExperts', -1)" class="w-10 h-10 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold flex items-center justify-center transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;i data-lucide="minus" class="w-4 h-4"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="number" id="numExperts" value="3" min="3" max="20" class="w-14 h-10 text-center focus:outline-none bg-transparent text-lg font-bold text-blue-600" readonly&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button onclick="updateNumber('numExperts', 1)" class="w-10 h-10 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold flex items-center justify-center transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;i data-lucide="plus" class="w-4 h-4"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-[10px] text-slate-400 font-medium mt-2 flex items-center gap-1.5 ml-1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="info" class="w-3 h-3"&gt;&lt;/i&gt; แนะนำ 3-5 คนขึ้นไป</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- จำนวนข้อคำถาม --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex-none"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label class="block text-slate-500 font-bold mb-2 text-[10px] uppercase tracking-widest"&gt;จำนวนข้อคำถาม&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex items-center shadow-sm rounded-xl overflow-hidden border border-slate-200 w-fit bg-white"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button onclick="updateNumber('numItems', -1)" class="w-10 h-10 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold flex items-center justify-center transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;i data-lucide="minus" class="w-4 h-4"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;input type="number" id="numItems" value="5" min="1" max="100" class="w-14 h-10 text-center focus:outline-none bg-transparent text-lg font-bold text-blue-600" readonly&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button onclick="updateNumber('numItems', 1)" class="w-10 h-10 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold flex items-center justify-center transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;i data-lucide="plus" class="w-4 h-4"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Generate Button --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex-none pt-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onclick="generateTable()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-8 rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95 whitespace-nowrap flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="layout-grid" class="w-5 h-5"&gt;&lt;/i&gt; สร้างตารางประเมิน</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="itemDetailsSection" class="hidden mt-8 bg-blue-50/40 p-6 rounded-2xl border border-blue-100 fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="align-left" class="w-4 h-4 text-blue-600"&gt;&lt;/i&gt; ระบุรายละเอียดข้อคำถามรายข้อ</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="itemInputsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Evaluation Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="evaluationSection" class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8 hidden fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-xl md:text-2xl font-bold mb-8 flex items-center gap-3 text-slate-800" style="font-family: 'Kanit', sans-serif;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="clipboard-list" class="text-blue-600"&gt;&lt;/i&gt; ตารางการประเมินความตรงเชิงเนื้อหา</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/h2&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- เกณฑ์การให้คะแนน (Rating Criteria Section) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mb-10 p-5 md:p-8 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-sm font-bold text-slate-700 mb-6 flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="bookmark" class="w-4 h-4 text-blue-600"&gt;&lt;/i&gt; เกณฑ์การให้คะแนน:</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-white p-5 rounded-2xl border border-slate-200 border-l-4 border-l-red-500 shadow-sm flex items-center gap-5 transition-transform hover:scale-105"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-4xl font-black text-red-500 opacity-60"&gt;1&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-[15px] font-bold text-red-600 leading-tight"&gt;ไม่เกี่ยวข้อง&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-[11px] text-slate-500 font-medium mt-0.5"&gt;ไม่สอดคล้องกับแนวคิด&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-white p-5 rounded-2xl border border-slate-200 border-l-4 border-l-orange-500 shadow-sm flex items-center gap-5 transition-transform hover:scale-105"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-4xl font-black text-orange-500 opacity-60"&gt;2&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-[15px] font-bold text-orange-600 leading-tight"&gt;เกี่ยวข้องน้อย&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-[11px] text-slate-500 font-medium mt-0.5"&gt;ต้องปรับปรุงมาก&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-white p-5 rounded-2xl border border-slate-200 border-l-4 border-l-green-500 shadow-sm flex items-center gap-5 transition-transform hover:scale-105"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-4xl font-black text-green-500 opacity-60"&gt;3&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-[15px] font-bold text-green-600 leading-tight"&gt;เกี่ยวข้องมาก&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-[11px] text-slate-500 font-medium mt-0.5"&gt;อาจต้องปรับปรุงเล็กน้อย&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-white p-5 rounded-2xl border border-slate-200 border-l-4 border-l-emerald-600 shadow-sm flex items-center gap-5 transition-transform hover:scale-105"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-4xl font-black text-emerald-600 opacity-60"&gt;4&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-[15px] font-bold text-emerald-700 leading-tight"&gt;เกี่ยวข้องมากที่สุด&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-[11px] text-slate-500 font-medium mt-0.5"&gt;เหมาะสมชัดเจน&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="info" class="w-5 h-5 text-amber-600"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p class="text-xs md:text-sm text-amber-900 font-semibold leading-relaxed"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="font-bold"&gt;หมายเหตุ:&lt;/span&gt; คะแนน 3-4 ถือว่า "ตรงตามเนื้อหา" ส่วนคะแนน 1-2 ถือว่า "ไม่ตรงตามเนื้อหา"</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="overflow-x-auto rounded-2xl border border-slate-200 custom-scrollbar shadow-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="evaluationTable" class="w-full border-collapse text-sm whitespace-nowrap"&gt;&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex flex-col sm:flex-row gap-4 mt-10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="calculateCVI()" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-200 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl active:scale-95 text-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="calculator" class="w-6 h-6"&gt;&lt;/i&gt; คำนวณค่า CVI</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="clearAllScores()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-4 px-10 rounded-2xl transition-all flex items-center justify-center gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="trash-2" class="w-5 h-5"&gt;&lt;/i&gt; ล้างข้อมูล</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Results Section (ตามแบบรูปภาพใหม่) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="resultsSection" class="hidden space-y-10 fade-in"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Summary Cards Row --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="grid grid-cols-1 md:grid-cols-3 gap-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="result-card bg-blue-600 rounded-3xl p-8 text-white shadow-xl shadow-blue-100 relative overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="absolute right-[-20px] top-[-20px] opacity-10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="trending-up" class="w-32 h-32"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex justify-between items-start"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-blue-100 text-[10px] font-black uppercase tracking-widest mb-1"&gt;S-CVI/Ave&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;h4 id="scviAve" class="text-5xl font-black"&gt;1.000&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-blue-100/80 text-[11px] font-medium mt-2"&gt;ค่าเฉลี่ย I-CVI&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="bg-white/20 p-3 rounded-2xl backdrop-blur-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;i data-lucide="trending-up" class="w-6 h-6"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="result-card bg-purple-600 rounded-3xl p-8 text-white shadow-xl shadow-purple-100 relative overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="absolute right-[-20px] top-[-20px] opacity-10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="check-circle" class="w-32 h-32"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex justify-between items-start"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-purple-100 text-[10px] font-black uppercase tracking-widest mb-1"&gt;S-CVI/UA&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;h4 id="scviUa" class="text-5xl font-black"&gt;1.000&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-purple-100/80 text-[11px] font-medium mt-2"&gt;สัดส่วนข้อที่ผ่านเกณฑ์ทุกคน&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="bg-white/20 p-3 rounded-2xl backdrop-blur-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;i data-lucide="check-circle" class="w-6 h-6"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="result-card bg-emerald-600 rounded-3xl p-8 text-white shadow-xl shadow-emerald-100 relative overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="absolute right-[-20px] top-[-20px] opacity-10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="award" class="w-32 h-32"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex justify-between items-start"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="flex-1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-emerald-100 text-[10px] font-black uppercase tracking-widest mb-1"&gt;สถานะโดยรวม&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;h4 id="overallStatus" class="text-3xl font-black mt-2 leading-tight"&gt;ผ่านเกณฑ์ดีเยี่ยม&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p id="statusNote" class="text-emerald-100/80 text-[11px] font-medium mt-2"&gt;เครื่องมือมีความตรงเชิงเนื้อหาสูง&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="bg-white/20 p-3 rounded-2xl backdrop-blur-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;i data-lucide="award" class="w-6 h-6"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Analysis Table Card --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-200 overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-6 md:p-8 border-b border-slate-100 flex items-center gap-3 bg-slate-50/50"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="w-10 h-10 bg-white rounded-xl shadow-sm border border-slate-200 flex items-center justify-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="file-text" class="text-blue-600 w-5 h-5"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-xl font-bold text-slate-800" style="font-family: 'Kanit', sans-serif;"&gt;ผลการวิเคราะห์รายข้อ (I-CVI)&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="overflow-x-auto custom-scrollbar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;table class="w-full text-sm border-collapse"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;tr class="bg-white text-slate-500 text-[11px] font-black uppercase tracking-widest border-b border-slate-100"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;th class="p-6 text-left"&gt;ข้อที่&lt;/th&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;th class="p-6 text-center"&gt;คะแนนผู้เชี่ยวชาญ&lt;/th&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;th class="p-6 text-center"&gt;จำนวนที่เห็นด้วย (คะแนน 3-4)&lt;/th&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;th class="p-6 text-center"&gt;I-CVI&lt;/th&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;th class="p-6 text-center"&gt;สถานะ&lt;/th&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tbody id="resultsTableBody" class="divide-y divide-slate-50"&gt;&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tfoot&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;tr class="bg-blue-50/50 font-bold text-blue-800 border-t-2 border-blue-100"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;td class="p-5 text-center"&gt;รวม/เฉลี่ย&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;td class="p-5 text-center"&gt;-&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;td class="p-5 text-center"&gt;-&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;td class="p-5 text-center"&gt;S-CVI/Ave = &lt;span id="footerAve"&gt;0.000&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;td class="p-5 text-center"&gt;S-CVI/UA = &lt;span id="footerUa"&gt;0.000&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tfoot&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;!-- Interpretation Guide --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Passed Criteria --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-emerald-50/50 border border-emerald-100 p-8 rounded-[2rem] shadow-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="text-[15px] font-bold text-emerald-800 flex items-center gap-2 mb-5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"&gt;&lt;/i&gt; เกณฑ์ที่ยอมรับได้</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;ul class="space-y-3 text-emerald-800/80 text-xs font-medium leading-relaxed"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start gap-2"&gt;• I-CVI ≥ 0.78 (สำหรับผู้เชี่ยวชาญ 6 คนขึ้นไป)&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start gap-2"&gt;• I-CVI = 1.00 (สำหรับผู้เชี่ยวชาญ 5 คนหรือน้อยกว่า)&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start gap-2"&gt;• S-CVI/Ave ≥ 0.90 (ดีเยี่ยม)&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start gap-2"&gt;• S-CVI/UA ≥ 0.80 (ผ่านเกณฑ์มาตรฐาน)&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Improve Criteria --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-amber-50/50 border border-amber-100 p-8 rounded-[2rem] shadow-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h4 class="text-[15px] font-bold text-amber-800 flex items-center gap-2 mb-5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600"&gt;&lt;/i&gt; ข้อที่ต้องพิจารณาปรับปรุง</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;ul class="space-y-3 text-amber-800/80 text-xs font-medium leading-relaxed"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start gap-2"&gt;• I-CVI &lt; 0.78 ควรปรับปรุงหรือตัดออก&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start gap-2"&gt;• ข้อที่มีผู้เชี่ยวชาญให้คะแนน 1-2 มาก&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;li class="flex items-start gap-2"&gt;• ควรพิจารณาข้อเสนอแนะจากผู้เชี่ยวชาญร่วมด้วย&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex flex-col items-center gap-4 mt-8 no-print"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="openExportModal()" class="bg-gradient-to-r from-slate-800 to-slate-900 hover:scale-105 text-white font-bold py-4 px-12 rounded-2xl transition-all shadow-xl active:scale-95 text-lg flex items-center gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i data-lucide="file-output" class="w-6 h-6"&gt;&lt;/i&gt; ดูผลลัพธ์และส่งออก (Export)</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-[11px] text-slate-400 font-medium"&gt;คุณสามารถดาวน์โหลดรายงานเป็นไฟล์ Excel หรือรูปภาพได้&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="text-center py-10 mt-12 text-slate-400 text-[11px] border-t border-slate-100 font-bold uppercase tracking-widest"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>© 2024 CVI Analyzer | คณะพยาบาลศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Manual Modal --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="manualModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col transform scale-95 transition-transform duration-300" id="manualModalContent"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex items-center justify-between p-6 border-b border-slate-100"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-xl font-bold text-slate-800 flex items-center gap-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="book-open" class="w-6 h-6 text-blue-600"&gt;&lt;/i&gt; คู่มือการใช้งาน CVI</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="closeManual()" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="x" class="w-5 h-5"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-8 overflow-y-auto custom-scrollbar flex-1 space-y-6 text-slate-600"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="font-bold text-lg text-blue-700 mb-2"&gt;CVI คืออะไร?&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-sm leading-relaxed"&gt;ดัชนีความตรงเชิงเนื้อหา (Content Validity Index) ใช้สำหรับตรวจสอบความสอดคล้องระหว่างข้อคำถามกับนิยามหรือวัตถุประสงค์ของการวิจัย โดยใช้การพิจารณาจากผู้เชี่ยวชาญเป็นหลัก&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="font-bold text-lg text-blue-700 mb-2"&gt;ขั้นตอนการใช้งาน&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;ol class="list-decimal ml-5 text-sm space-y-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;ระบุจำนวนผู้เชี่ยวชาญและจำนวนข้อคำถาม&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;(ทางเลือก) เปิดสวิตช์ ON เพื่อระบุรายละเอียดของแต่ละข้อคำถาม&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;กดปุ่ม "สร้างตารางประเมิน"&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;กรอกคะแนน (1-4) ตามความเห็นของผู้เชี่ยวชาญ&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;กดปุ่ม "คำนวณค่า CVI" เพื่อดูผลการวิเคราะห์&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/ol&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-6 text-center border-t border-slate-50"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="closeManual()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-12 rounded-xl transition-all shadow-md active:scale-95"&gt;เข้าใจแล้ว&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Export Modal --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="exportModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 md:p-6 opacity-0 transition-opacity duration-300"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col transform scale-95 transition-transform duration-300" id="exportModalContent"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex items-center justify-between p-6 border-b border-gray-100 bg-slate-50/50"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="text-xl font-bold text-slate-800 flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="file-check-2" class="w-6 h-6 text-indigo-600"&gt;&lt;/i&gt; ผลการประเมินฉบับเต็ม</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="closeExportModal()" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="x" class="w-6 h-6"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="overflow-y-auto p-8 flex-1 bg-white custom-scrollbar" id="exportContentArea"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mb-10 text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-3xl font-black text-slate-800 tracking-tight mb-2"&gt;CVI Analysis Report&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-slate-400 text-sm font-bold uppercase tracking-[0.2em]"&gt;Scale-level Content Validity Index&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex justify-center gap-6 mt-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-blue-50 text-blue-800 px-6 py-3 rounded-2xl font-black border border-blue-100 text-lg shadow-sm" id="modalSummaryAve"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="bg-purple-50 text-purple-800 px-6 py-3 rounded-2xl font-black border border-purple-100 text-lg shadow-sm" id="modalSummaryUa"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="overflow-x-auto rounded-3xl border border-slate-100 shadow-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table id="modalResultsTable" class="w-full border-collapse text-sm"&gt;&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="mt-8 text-center text-[10px] text-slate-400 font-bold italic"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>รายงานนี้สร้างขึ้นโดยโปรแกรมวิเคราะห์ CVI คณะพยาบาลศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-6 border-t border-gray-100 bg-slate-50/50 rounded-b-[2.5rem] flex flex-wrap justify-center gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="exportToExcel()" class="bg-[#107C41] hover:bg-[#0c6132] text-white font-bold py-4 px-10 rounded-2xl flex items-center gap-3 shadow-lg hover:-translate-y-1 transition-all active:scale-95 text-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="sheet" class="w-6 h-6"&gt;&lt;/i&gt; EXCEL</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="exportToImage()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-10 rounded-2xl flex items-center gap-3 shadow-lg hover:-translate-y-1 transition-all active:scale-95 text-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i data-lucide="image" class="w-6 h-6"&gt;&lt;/i&gt; IMAGE</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Toast Notification --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="toast" class="fixed bottom-8 right-8 transform translate-y-20 opacity-0 transition-all duration-500 z-50"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bg-slate-900 text-white px-8 py-5 rounded-[1.5rem] shadow-2xl flex items-center gap-4 border border-slate-700"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="bg-emerald-500 p-1.5 rounded-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;i data-lucide="check" class="w-4 h-4 text-white"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span id="toastMessage" class="font-bold text-sm"&gt;ข้อความ&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let scores = {};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let itemDetails = {};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let numExperts = 3;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let numItems = 5;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let isDetailsEnabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let analysisResults = [];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showToast(message) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const toast = document.getElementById('toast');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('toastMessage').textContent = message;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>toast.classList.remove('translate-y-20', 'opacity-0');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; { toast.classList.add('translate-y-20', 'opacity-0'); }, 2500);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateNumber(inputId, delta) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const el = document.getElementById(inputId);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let val = parseInt(el.value) || 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>val += delta;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (inputId === 'numExperts') { if (val &lt; 3) val = 3; if (val &gt; 20) val = 20; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else if (inputId === 'numItems') { if (val &lt; 1) val = 1; if (val &gt; 100) val = 100; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>el.value = val;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (inputId === 'numItems' &amp;&amp; isDetailsEnabled) renderItemInputs();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function toggleItemDetails() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>isDetailsEnabled = document.getElementById('enableDetails').checked;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const section = document.getElementById('itemDetailsSection');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isDetailsEnabled) { section.classList.remove('hidden'); renderItemInputs(); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else { section.classList.add('hidden'); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderItemInputs() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('itemInputsContainer');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const currentCount = parseInt(document.getElementById('numItems').value);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveItemDetails();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let html = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 1; i &lt;= currentCount; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const savedValue = itemDetails[i] || '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html += `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex flex-col gap-2 p-4 bg-white rounded-2xl border border-blue-100 shadow-sm transition-all hover:border-blue-400 group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="font-bold text-blue-300 text-[10px] uppercase tracking-widest group-hover:text-blue-500 transition-colors"&gt;ข้อที่ ${i}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" id="itemDetail_${i}" value="${savedValue}" placeholder="ใส่รายละเอียดคำถาม..." class="w-full border-none focus:ring-0 p-0 text-sm font-bold text-slate-700 placeholder:text-slate-200 bg-transparent"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>container.innerHTML = html;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function saveItemDetails() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const inputs = document.querySelectorAll('input[id^="itemDetail_"]');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>inputs.forEach(input =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const idParts = input.id.split('_');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const idx = parseInt(idParts[1]);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itemDetails[idx] = input.value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function generateTable() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>numExperts = parseInt(document.getElementById('numExperts').value) || 3;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>numItems = parseInt(document.getElementById('numItems').value) || 5;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isDetailsEnabled) saveItemDetails();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>scores = {};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let tableHTML = `&lt;thead class="bg-slate-50 text-slate-500 text-[10px] font-black uppercase tracking-widest border-b border-slate-200"&gt;&lt;tr&gt;&lt;th class="p-6 text-center sticky left-0 bg-slate-50 z-10 w-[80px]"&gt;ข้อที่&lt;/th&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isDetailsEnabled) tableHTML += `&lt;th class="p-6 text-left min-w-[300px] border-l border-slate-100"&gt;รายละเอียดคำถาม&lt;/th&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let e = 1; e &lt;= numExperts; e++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>tableHTML += `&lt;th class="p-6 text-center min-w-[150px] border-l border-slate-100"&gt;ผู้เชี่ยวชาญ ${e}&lt;/th&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>tableHTML += '&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 1; i &lt;= numItems; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>tableHTML += `&lt;tr class="border-b border-slate-50 hover:bg-blue-50/40 transition-colors"&gt;&lt;td class="p-6 font-black text-slate-400 sticky left-0 bg-white shadow-sm z-10 text-center"&gt;ข้อ ${i}&lt;/td&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (isDetailsEnabled) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const detailText = itemDetails[i] || '&lt;span class="text-slate-200 italic font-medium"&gt;ไม่ได้ระบุ&lt;/span&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tableHTML += `&lt;td class="p-6 text-slate-600 text-sm whitespace-normal min-w-[300px] border-l border-slate-50 font-bold"&gt;${detailText}&lt;/td&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for (let e = 1; e &lt;= numExperts; e++) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tableHTML += `&lt;td class="p-4 text-center border-l border-slate-50"&gt;&lt;div class="flex justify-center gap-1.5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>${[1, 2, 3, 4].map(score =&gt; `&lt;button onclick="setScore(${i}, ${e}, ${score})" id="btn-${i}-${e}-${score}" class="score-btn w-9 h-9 rounded-xl text-xs font-black transition-all shadow-sm bg-slate-100 text-slate-400 hover:bg-slate-200"&gt;${score}&lt;/button&gt;`).join('')}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;&lt;/td&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>tableHTML += '&lt;/tr&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>tableHTML += '&lt;/tbody&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('evaluationTable').innerHTML = tableHTML;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('evaluationSection').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('resultsSection').classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showToast('สร้างตารางเรียบร้อยแล้ว');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('evaluationSection').scrollIntoView();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>lucide.createIcons();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setScore(item, expert, score) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const key = `${item}-${expert}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>scores[key] = score;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let s = 1; s &lt;= 4; s++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const btn = document.getElementById(`btn-${item}-${expert}-${s}`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.classList.remove('selected', 'bg-red-500', 'bg-orange-500', 'bg-green-500', 'bg-emerald-600', 'text-white');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.classList.add('bg-slate-100', 'text-slate-400');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const selectedBtn = document.getElementById(`btn-${item}-${expert}-${score}`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>selectedBtn.classList.remove('bg-slate-100', 'text-slate-400');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>selectedBtn.classList.add('selected', 'text-white');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (score === 1) selectedBtn.classList.add('bg-red-500');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else if (score === 2) selectedBtn.classList.add('bg-orange-500');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else if (score === 3) selectedBtn.classList.add('bg-green-500');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>else selectedBtn.classList.add('bg-emerald-600');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function clearAllScores() {<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(confirm('ล้างคะแนนทั้งหมดใช่หรือไม่?')){</p>
+<p class="p1"><span class="Apple-converted-space">                </span>scores = {};<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>generateTable();<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('ล้างข้อมูลเรียบร้อยแล้ว');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function calculateCVI() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const totalCells = numItems * numExperts;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const filledCells = Object.keys(scores).length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (filledCells &lt; totalCells) { showToast(`⚠️ กรุณากรอกคะแนนให้ครบทุกช่อง`); return; }</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>analysisResults = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let totalICVI = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let itemsWithFullAgreement = 0;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 1; i &lt;= numItems; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let relevantCount = 0;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const expertScores = [];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for (let e = 1; e &lt;= numExperts; e++) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const score = scores[`${i}-${e}`];</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>expertScores.push(score);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (score &gt;= 3) relevantCount++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const iCVI = relevantCount / numExperts;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (relevantCount === numExperts) itemsWithFullAgreement++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>totalICVI += iCVI;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>let threshold = numExperts &lt;= 5 ? 1.0 : 0.78;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let status = iCVI &gt;= threshold ? 'ผ่านเกณฑ์' : 'ต้องปรับปรุง';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let statusClass = status === 'ผ่านเกณฑ์' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700';</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>analysisResults.push({ item: i, detail: itemDetails[i] || '', scores: expertScores, relevantCount, iCVI, status, statusClass });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sCVIAve = totalICVI / numItems;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sCVIUA = itemsWithFullAgreement / numItems;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>displaySummary(sCVIAve, sCVIUA);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function displaySummary(sCVIAve, sCVIUA) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('scviAve').textContent = sCVIAve.toFixed(3);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('scviUa').textContent = sCVIUA.toFixed(3);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('footerAve').textContent = sCVIAve.toFixed(3);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('footerUa').textContent = sCVIUA.toFixed(3);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const statusH4 = document.getElementById('overallStatus');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const statusP = document.getElementById('statusNote');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(sCVIAve &gt;= 0.90) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>statusH4.textContent = 'ผ่านเกณฑ์ดีเยี่ยม';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>statusP.textContent = 'เครื่องมือมีความตรงเชิงเนื้อหาสูง';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if(sCVIAve &gt;= 0.80) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>statusH4.textContent = 'ผ่านเกณฑ์';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>statusP.textContent = 'เครื่องมือมีความตรงเชิงเนื้อหาในเกณฑ์ที่ยอมรับได้';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>statusH4.textContent = 'ต้องพิจารณาปรับปรุง';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>statusP.textContent = 'เครื่องมือมีความตรงเชิงเนื้อหาต่ำกว่าเกณฑ์มาตรฐาน';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderResultsTable(sCVIAve, sCVIUA);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('resultsSection').classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('resultsSection').scrollIntoView();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showToast('คำนวณผลเรียบร้อย');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>lucide.createIcons();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderResultsTable(sCVIAve, sCVIUA) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let bodyHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>analysisResults.forEach(r =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const scoresDisplay = r.scores.map(s =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;span class="inline-flex items-center justify-center w-6 h-6 rounded-md border border-emerald-100 ${s &gt;= 3 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'} text-[10px] font-black shadow-sm mx-0.5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>${s}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`).join('');</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>bodyHTML += `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;tr class="hover:bg-slate-50 transition-colors"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;td class="p-5 text-center font-bold text-slate-400"&gt;ข้อ ${r.item}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;td class="p-5 text-center"&gt;${scoresDisplay}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;td class="p-5 text-center font-black text-slate-700"&gt;${r.relevantCount}/${numExperts}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;td class="p-5 text-center font-black text-blue-600"&gt;${r.iCVI.toFixed(3)}&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;td class="p-5 text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="px-3 py-1 rounded-full text-[10px] font-bold ${r.statusClass}"&gt;${r.status}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('resultsTableBody').innerHTML = bodyHTML;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>buildModalTable(sCVIAve, sCVIUA);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function buildModalTable(sCVIAve, sCVIUA) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let tableHTML = `&lt;thead class="bg-slate-50 text-slate-500 text-[10px] font-black uppercase tracking-widest"&gt;&lt;tr&gt;&lt;th class="p-5 text-center"&gt;ข้อที่&lt;/th&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isDetailsEnabled) tableHTML += `&lt;th class="p-5 text-left"&gt;รายละเอียดคำถาม&lt;/th&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>tableHTML += `&lt;th class="p-5 text-center"&gt;คะแนนผู้เชี่ยวชาญ&lt;/th&gt;&lt;th class="p-5 text-center"&gt;I-CVI&lt;/th&gt;&lt;th class="p-5 text-center"&gt;สถานะ&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>analysisResults.forEach(r =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const scoresDisplay = r.scores.map(s =&gt; `&lt;span class="inline-flex items-center justify-center w-7 h-7 rounded border border-emerald-100 ${s &gt;= 3 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'} text-[10px] font-black mx-0.5"&gt;${s}&lt;/span&gt;`).join('');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>tableHTML += `&lt;tr class="border-b border-slate-50"&gt;&lt;td class="p-4 text-center font-bold text-slate-400"&gt;${r.item}&lt;/td&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (isDetailsEnabled) tableHTML += `&lt;td class="p-4 border-l border-slate-50 text-[11px] font-bold text-slate-600"&gt;${r.detail}&lt;/td&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>tableHTML += `&lt;td class="p-4 text-center border-l border-slate-50"&gt;${scoresDisplay}&lt;/td&gt;&lt;td class="p-4 text-center font-black border-l border-slate-50 text-blue-600"&gt;${r.iCVI.toFixed(3)}&lt;/td&gt;&lt;td class="p-4 text-center border-l border-slate-50"&gt;&lt;span class="px-3 py-1 rounded-full text-[10px] font-bold ${r.statusClass}"&gt;${r.status}&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>tableHTML += `&lt;tr class="bg-blue-50/40 font-black"&gt;&lt;td colspan="${isDetailsEnabled ? 4 : 3}" class="p-6 text-right text-blue-800"&gt;S-CVI/Ave&lt;/td&gt;&lt;td class="p-6 text-center text-blue-800"&gt;${sCVIAve.toFixed(3)}&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('modalResultsTable').innerHTML = tableHTML;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('modalSummaryAve').textContent = `S-CVI/Ave = ${sCVIAve.toFixed(3)}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('modalSummaryUa').textContent = `S-CVI/UA = ${sCVIUA.toFixed(3)}`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function openManual() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const modal = document.getElementById('manualModal');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const content = document.getElementById('manualModalContent');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>modal.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function closeManual() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const modal = document.getElementById('manualModal');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const content = document.getElementById('manualModalContent');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>modal.classList.add('opacity-0'); content.classList.add('scale-95'); content.classList.remove('scale-100');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; { modal.classList.add('hidden'); }, 300);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function openExportModal() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const modal = document.getElementById('exportModal');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const content = document.getElementById('exportModalContent');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>modal.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function closeExportModal() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const modal = document.getElementById('exportModal');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const content = document.getElementById('exportModalContent');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>modal.classList.add('opacity-0'); content.classList.add('scale-95');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; modal.classList.add('hidden'), 300);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function exportToExcel() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let data = analysisResults.map(r =&gt; ({ "ข้อ": r.item, "รายละเอียด": r.detail, "จำนวนที่เห็นด้วย": r.relevantCount, "I-CVI": r.iCVI, "ผล": r.status }));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const ws = XLSX.utils.json_to_sheet(data);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const wb = XLSX.utils.book_new();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>XLSX.utils.book_append_sheet(wb, ws, "CVI_Analysis");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>XLSX.writeFile(wb, "CVI_Analysis_Report.xlsx");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function exportToImage() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html2canvas(document.getElementById('exportContentArea'), { scale: 3 }).then(canvas =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const link = document.createElement('a');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>link.download = 'CVI_Full_Report.jpg';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>link.href = canvas.toDataURL('image/jpeg', 1.0);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>link.click();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function openMenu() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const backdrop = document.getElementById('menuBackdrop');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const menu = document.getElementById('sideMenu');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>backdrop.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; { backdrop.classList.remove('opacity-0'); backdrop.classList.add('opacity-100'); menu.classList.remove('-translate-x-full'); }, 10);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function closeMenu() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const backdrop = document.getElementById('menuBackdrop');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const menu = document.getElementById('sideMenu');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>menu.classList.add('-translate-x-full'); backdrop.classList.remove('opacity-100'); backdrop.classList.add('opacity-0');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; backdrop.classList.add('hidden'), 300);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.addEventListener('DOMContentLoaded', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>lucide.createIcons();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
